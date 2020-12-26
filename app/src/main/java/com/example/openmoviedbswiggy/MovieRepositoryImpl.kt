@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: MovieDataSource) : MovieRepository {
 
-    override suspend fun fetchMovies() = withContext(Dispatchers.IO) {
-        when (val result = movieDataSourceImpl.fetchMovies()) {
+    override suspend fun fetchMovies(searchString: String) = withContext(Dispatchers.IO) {
+        when (val result = movieDataSourceImpl.fetchMovies(searchString)) {
             is Result.Success -> {
             }
             is Result.Error -> {

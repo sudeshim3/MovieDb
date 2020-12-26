@@ -8,9 +8,9 @@ import javax.inject.Inject
 class MovieViewModel @Inject constructor(private val movieRepositoryImpl: MovieRepository) :
     ViewModel() {
 
-    fun fetchMovies() {
+    fun fetchMovies(searchString: String) {
         viewModelScope.launch {
-            movieRepositoryImpl.fetchMovies()
+            movieRepositoryImpl.fetchMovies(searchString)
         }
     }
 }
