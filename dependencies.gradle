@@ -17,4 +17,5 @@ ext {
     LifecycleViewModel = "2.2.0"
     OkHttp = '4.8.1'
     Timber = "4.7.1"
+    Lottie = '3.4.1'
 }
