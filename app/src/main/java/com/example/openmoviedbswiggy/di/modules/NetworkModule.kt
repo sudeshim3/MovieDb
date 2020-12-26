@@ -4,7 +4,6 @@ import AppConstant.API_KEY
 import AppConstant.BASE_URL
 import android.os.Looper
 import com.example.openmoviedbswiggy.ApiInterceptor
-import com.example.openmoviedbswiggy.BuildConfig
 import com.example.openmoviedbswiggy.OmbdApi
 import com.example.openmoviedbswiggy.extensions.delegatingCallFactory
 import dagger.Lazy
@@ -45,13 +44,11 @@ object NetworkModule {
             connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
             readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
             addInterceptor(apiInterceptor)
-            if (BuildConfig.BUILD_TYPE != "release") {
-                addInterceptor(
-                    HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }
-                )
-            }
+            addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
         }.build()
     }
 
