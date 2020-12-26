@@ -4,10 +4,14 @@ import AppConstant.API_KEY
 import AppConstant.BASE_URL
 import android.os.Looper
 import com.example.openmoviedbswiggy.ApiInterceptor
+import com.example.openmoviedbswiggy.BuildConfig
 import com.example.openmoviedbswiggy.OmbdApi
+import com.example.openmoviedbswiggy.extensions.delegatingCallFactory
+import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -17,13 +21,14 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
+    @Singleton
     fun provideRetrofit(
-        okHttpClient: OkHttpClient,
+        okHttpClient: Lazy<OkHttpClient>,
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient)
+            .delegatingCallFactory(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
     }
@@ -40,6 +45,13 @@ object NetworkModule {
             connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
             readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
             addInterceptor(apiInterceptor)
+            if (BuildConfig.BUILD_TYPE != "release") {
+                addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                )
+            }
         }.build()
     }
 

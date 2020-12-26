@@ -3,6 +3,7 @@ package com.example.openmoviedbswiggy.di
 import android.app.Application
 import com.example.openmoviedbswiggy.App
 import com.example.openmoviedbswiggy.di.modules.NetworkModule
+import com.example.openmoviedbswiggy.di.modules.ViewModelFactoryModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -13,7 +14,10 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AndroidInjectionModule::class,
-        NetworkModule::class
+        NetworkModule::class,
+        AppModule::class,
+        ViewModelFactoryModule::class,
+        ActivityBuilderModule::class
     ]
 )
 interface AppComponent : AndroidInjector<App> {
