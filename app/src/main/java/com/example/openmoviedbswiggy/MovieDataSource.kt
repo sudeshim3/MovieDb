@@ -1,6 +1,9 @@
 package com.example.openmoviedbswiggy
 
+import com.example.openmoviedbswiggy.datamodel.Result
+import com.example.openmoviedbswiggy.datamodel.SearchResult
+
 interface MovieDataSource {
 
-    fun fetchMovies()
+    suspend fun fetchMovies(): Result<SearchResult>
 }

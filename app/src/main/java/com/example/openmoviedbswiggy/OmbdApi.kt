@@ -1,16 +1,18 @@
 package com.example.openmoviedbswiggy
 
-import com.example.openmoviedbswiggy.datamodel.BaseResponseDataModel
-import org.json.JSONObject
+import com.example.openmoviedbswiggy.datamodel.SearchResult
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Query
 
 // http://www.omdbapi.com/?apikey={API_KEY}&s={SEARCH_STRING}&page={PAGE_NO}
 interface OmbdApi {
 
-    @GET("s={searchTerm}&page={page}")
-    suspend fun getSearchResult(@Path("searchTerm") searchString: String, @Path("page") pageNo: Int): Response<BaseResponseDataModel<JSONObject>>
+    @GET("/")
+    suspend fun getSearchResult(
+        @Query("s") searchString: String,
+        @Query("page") pageNo: Int
+    ): Response<SearchResult>
 
     @GET
     suspend fun getMovieDetails()
