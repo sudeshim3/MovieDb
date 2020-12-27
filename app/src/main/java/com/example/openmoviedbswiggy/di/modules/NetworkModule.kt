@@ -1,9 +1,9 @@
 package com.example.openmoviedbswiggy.di.modules
 
-import AppConstant.API_KEY
 import AppConstant.BASE_URL
 import android.os.Looper
 import com.example.openmoviedbswiggy.ApiInterceptor
+import com.example.openmoviedbswiggy.BuildConfig
 import com.example.openmoviedbswiggy.OmbdApi
 import com.example.openmoviedbswiggy.extensions.delegatingCallFactory
 import dagger.Lazy
@@ -59,7 +59,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApiInterceptor(): ApiInterceptor {
-        return ApiInterceptor(API_KEY)
+        return ApiInterceptor(BuildConfig.API_KEY)
     }
 
     @Provides

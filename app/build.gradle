@@ -6,6 +6,10 @@ plugins {
 }
 apply from: "../ktlint.gradle"
 
+def credentials = rootProject.file("local.properties")
+def credentialProperty = new Properties()
+credentialProperty.load(new FileInputStream(credentials))
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
@@ -16,6 +20,8 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+        buildConfigField("String", "API_KEY", credentialProperty['API_KEY'])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
