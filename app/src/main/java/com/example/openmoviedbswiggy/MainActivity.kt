@@ -36,7 +36,12 @@ class MainActivity : DaggerAppCompatActivity() {
                 }
             }
         binding.searchView.doAfterTextChanged {
-            searchDebounce?.invoke(it.toString())
+            val currentString = it.toString().length
+            clearScreen()
+            if (currentString > MIN_CHAR_FOR_SEARCH) {
+                showLoadingScreen()
+                searchDebounce?.invoke(it.toString())
+            }
         }
         movieRecyclerViewAdapter = MovieRecyclerViewAdapter()
         binding.rvMovieSearchResult.adapter = movieRecyclerViewAdapter
@@ -45,18 +50,34 @@ class MainActivity : DaggerAppCompatActivity() {
             this,
             { movieResponse ->
                 when (movieResponse) {
-                    is MovieResponse.Loading -> {
-                        binding.loadingProgress.visible()
-                    }
                     is MovieResponse.Error -> {
-                        binding.loadingProgress.gone()
+                        binding.searchLoader.gone()
+                        binding.rvMovieSearchResult.gone()
+                        binding.errorMessage.visible()
+                        binding.errorMessage.text = movieResponse.error
                     }
                     is MovieResponse.Data -> {
+                        binding.searchLoader.gone()
+                        binding.errorMessage.gone()
                         movieRecyclerViewAdapter.submitList(movieResponse.result.searchResult)
+                        binding.rvMovieSearchResult.visible()
                     }
                 }
             }
         )
+    }
+
+    private fun clearScreen() {
+        if (movieRecyclerViewAdapter.currentList.size != 0) {
+            movieRecyclerViewAdapter.submitList(listOf())
+            movieRecyclerViewAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun showLoadingScreen() {
+        binding.searchLoader.visible()
+        binding.errorMessage.gone()
+        binding.rvMovieSearchResult.gone()
     }
 
     private fun debounce(
@@ -75,7 +96,7 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     companion object {
-        private const val SEARCH_DEBOUNCE_INTERVAL = 400L
+        private const val SEARCH_DEBOUNCE_INTERVAL = 800L
         private const val MIN_CHAR_FOR_SEARCH = 2
     }
 }

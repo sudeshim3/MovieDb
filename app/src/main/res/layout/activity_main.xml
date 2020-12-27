@@ -46,14 +46,6 @@
                 android:visibility="gone"
                 app:tint="@color/fontLight" />
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/search_loader"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/movie_loading" />
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -69,14 +61,29 @@
         app:spanCount="2"
         tools:listitem="@layout/movie_grid_item" />
 
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/loading_progress"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/search_loader"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/movie_loading" />
+
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        tools:text="Movie not found!"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
