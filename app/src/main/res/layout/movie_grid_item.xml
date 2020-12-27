@@ -18,24 +18,24 @@
                 android:id="@+id/movie_thumbnail_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                tools:src="@drawable/ic_no_image"/>
 
             <TextView
                 android:id="@+id/title_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/black_100"
-                android:maxLines="2"
+                android:lines="2"
                 android:paddingStart="8dp"
+                android:gravity="center"
                 android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
-                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="Starburst Galaxy M94 from Hubble" />
+                tools:text="The Devil All the Time" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

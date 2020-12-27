@@ -60,6 +60,9 @@ dependencies {
 
     implementation "com.squareup.okhttp3:okhttp:$rootProject.OkHttp"
     implementation("com.squareup.okhttp3:logging-interceptor:$rootProject.OkHttp")
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$rootProject.Glide"
+    kapt "com.github.bumptech.glide:compiler:$rootProject.Glide"
 
     kapt "com.google.dagger:dagger-android-processor:$rootProject.Dagger"
     kapt "com.google.dagger:dagger-compiler:$rootProject.Dagger"
