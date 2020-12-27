@@ -54,11 +54,17 @@ class MainActivity : DaggerAppCompatActivity() {
                         binding.searchLoader.gone()
                         binding.rvMovieSearchResult.gone()
                         binding.errorMessage.visible()
+                        binding.searchResultCount.gone()
                         binding.errorMessage.text = movieResponse.error
                     }
                     is MovieResponse.Data -> {
                         binding.searchLoader.gone()
                         binding.errorMessage.gone()
+                        binding.searchResultCount.text = getString(
+                            R.string.search_result_count,
+                            movieResponse.result.totalResults
+                        )
+                        binding.searchResultCount.visible()
                         movieRecyclerViewAdapter.submitList(movieResponse.result.searchResult)
                         binding.rvMovieSearchResult.visible()
                     }
@@ -70,6 +76,7 @@ class MainActivity : DaggerAppCompatActivity() {
     private fun clearScreen() {
         if (movieRecyclerViewAdapter.currentList.size != 0) {
             movieRecyclerViewAdapter.submitList(listOf())
+            binding.searchResultCount.gone()
             movieRecyclerViewAdapter.notifyDataSetChanged()
         }
     }

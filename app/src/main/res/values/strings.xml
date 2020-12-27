@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">OMDB</string>
     <string name="search_placeholder">Search movies</string>
+    <string name="search_result_count">Found %1$d movies</string>
 </resources>
