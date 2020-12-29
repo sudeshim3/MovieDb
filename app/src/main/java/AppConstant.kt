@@ -7,4 +7,6 @@ object AppConstant {
     const val SEARCH_DEBOUNCE_INTERVAL = 800L
     const val MIN_CHAR_FOR_SEARCH = 2
     const val PAGE_SIZE = 10
+    const val MOVIE_TYPE = 1
+    const val LOADER_TYPE = 2
 }

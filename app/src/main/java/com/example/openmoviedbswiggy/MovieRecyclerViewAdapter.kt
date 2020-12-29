@@ -1,5 +1,7 @@
 package com.example.openmoviedbswiggy
 
+import AppConstant.LOADER_TYPE
+import AppConstant.MOVIE_TYPE
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -30,6 +32,13 @@ class MovieRecyclerViewAdapter :
         val binding =
             MovieGridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieViewHolder(binding)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (position == itemCount)
+            return LOADER_TYPE
+        else
+            return MOVIE_TYPE
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {

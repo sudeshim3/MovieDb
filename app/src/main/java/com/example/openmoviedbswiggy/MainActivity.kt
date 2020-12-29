@@ -1,5 +1,6 @@
 package com.example.openmoviedbswiggy
 
+import AppConstant.LOADER_TYPE
 import AppConstant.MIN_CHAR_FOR_SEARCH
 import android.os.Bundle
 import android.text.SpannableStringBuilder
@@ -7,6 +8,7 @@ import android.view.WindowManager
 import androidx.core.text.italic
 import androidx.core.widget.doAfterTextChanged
 import androidx.paging.PagingData
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.openmoviedbswiggy.databinding.ActivityMainBinding
 import com.example.openmoviedbswiggy.extensions.gone
 import com.example.openmoviedbswiggy.extensions.visible
@@ -25,10 +27,6 @@ class MainActivity : DaggerAppCompatActivity() {
     private val binding get() = _binding!!
     lateinit var movieRecyclerViewAdapter: MovieRecyclerViewAdapter
 
-//    private val job = Job()
-//    override val coroutineContext: CoroutineContext
-//        get() = Dispatchers.IO + job
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -43,8 +41,19 @@ class MainActivity : DaggerAppCompatActivity() {
         observePagedSearchResult()
         observeSearchResult()
 
+        val gridLayoutManager = GridLayoutManager(this, 2)
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val viewType = movieRecyclerViewAdapter.getItemViewType(position)
+                return if (viewType == LOADER_TYPE) 2 else 1
+            }
+        }
         movieRecyclerViewAdapter = MovieRecyclerViewAdapter()
-        binding.rvMovieSearchResult.adapter = movieRecyclerViewAdapter
+        binding.rvMovieSearchResult.apply {
+            layoutManager = gridLayoutManager
+            adapter =
+                movieRecyclerViewAdapter.withLoadStateFooter(footer = MovieLoadAdapater())
+        }
     }
 
     private fun observeSearchResult() {
