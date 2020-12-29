@@ -4,4 +4,5 @@
     <string name="search_result_count">Found %1$d movies</string>
     <string name="search_example">Search a movie Example:</string>
     <string name="no_movies_found">Sorry, we Didn\'t find any movies for this search"</string>
+    <string name="retry">Retry</string>
 </resources>

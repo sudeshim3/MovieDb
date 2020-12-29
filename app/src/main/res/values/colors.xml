@@ -10,4 +10,14 @@
     <color name="black_100">#1A000000</color>
     <color name="fontLight">#81878c</color>
     <color name="fontDark">#2F363F</color>
+    <color name="black_300">#2F363F</color>
+
+    <color name="primaryColor">#d32f2f</color>
+    <color name="primaryLightColor">#ff6659</color>
+    <color name="primaryDarkColor">#9a0007</color>
+    <color name="secondaryColor">#546e7a</color>
+    <color name="secondaryLightColor">#819ca9</color>
+    <color name="secondaryDarkColor">#29434e</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#ffffff</color>
 </resources>
