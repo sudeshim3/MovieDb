@@ -5,5 +5,5 @@ import com.example.openmoviedbswiggy.datamodel.SearchResult
 
 interface MovieDataSource {
 
-    suspend fun fetchMovies(searchString: String): Result<SearchResult>
+    suspend fun fetchMovies(searchString: String, pageNumber: Int): Result<SearchResult>
 }

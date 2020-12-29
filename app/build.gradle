@@ -73,6 +73,9 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$rootProject.Dagger"
     kapt "com.google.dagger:dagger-compiler:$rootProject.Dagger"
 
+    // Paging
+    implementation "androidx.paging:paging-runtime:$rootProject.pagingVersion"
+
     implementation "com.squareup.inject:assisted-inject-annotations-dagger2:$rootProject.AssistedInject"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:$rootProject.AssistedInject"
 

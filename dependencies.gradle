@@ -18,4 +18,5 @@ ext {
     OkHttp = '4.8.1'
     Timber = "4.7.1"
     Lottie = '3.4.1'
+    pagingVersion = '3.0.0-alpha03'
 }

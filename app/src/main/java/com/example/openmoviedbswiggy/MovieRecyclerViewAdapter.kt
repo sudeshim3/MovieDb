@@ -2,12 +2,13 @@ package com.example.openmoviedbswiggy
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import com.example.openmoviedbswiggy.databinding.MovieGridItemBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 
-class MovieRecyclerViewAdapter : ListAdapter<MovieDataModel, MovieViewHolder>(MOVIE_COMPARATOR) {
+class MovieRecyclerViewAdapter :
+    PagingDataAdapter<MovieDataModel, MovieViewHolder>(MOVIE_COMPARATOR) {
 
     companion object {
         private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<MovieDataModel>() {
@@ -32,6 +33,9 @@ class MovieRecyclerViewAdapter : ListAdapter<MovieDataModel, MovieViewHolder>(MO
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        val item = getItem(position)
+        if (item != null) {
+            holder.bind(item)
+        }
     }
 }

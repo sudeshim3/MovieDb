@@ -1,7 +1,6 @@
 package com.example.openmoviedbswiggy.di.modules
 
 import AppConstant.BASE_URL
-import android.os.Looper
 import com.example.openmoviedbswiggy.ApiInterceptor
 import com.example.openmoviedbswiggy.BuildConfig
 import com.example.openmoviedbswiggy.OmbdApi
@@ -35,9 +34,6 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(apiInterceptor: ApiInterceptor): OkHttpClient {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            throw IllegalStateException("HTTP client initialized on main thread.")
-        }
         val REQUEST_TIMEOUT = 5L
 
         return OkHttpClient.Builder().apply {
