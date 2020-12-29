@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SearchResult(
     @SerializedName("Search")
-    val searchResult: List<MovieDataModel>,
+    val searchResult: List<MovieDataModel>?,
     @SerializedName("Response")
     val response: Boolean,
     @SerializedName("totalResults")

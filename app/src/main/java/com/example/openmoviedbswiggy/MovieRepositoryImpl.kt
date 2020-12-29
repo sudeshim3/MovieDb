@@ -28,10 +28,13 @@ class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: M
                     ) {
                         is Result.Success -> {
                             searchResult.send(Pair(nextPageNumber, result.data))
+                            val searchResult = result.data.searchResult
                             return LoadResult.Page(
-                                data = result.data.searchResult,
+                                data = searchResult ?: listOf(),
                                 prevKey = if (nextPageNumber == 1) null else nextPageNumber - 1,
-                                nextKey = nextPageNumber.plus(1)
+                                nextKey = if (searchResult == null) null else nextPageNumber.plus(
+                                    1
+                                )
                             )
                         }
                         is Result.Error -> {
