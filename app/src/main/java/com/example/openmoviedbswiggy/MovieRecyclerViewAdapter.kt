@@ -4,6 +4,7 @@ import AppConstant.LOADER_TYPE
 import AppConstant.MOVIE_TYPE_GRID
 import AppConstant.MOVIE_TYPE_LIST
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,7 @@ import com.example.openmoviedbswiggy.databinding.MovieGridItemBinding
 import com.example.openmoviedbswiggy.databinding.MovieRowItemBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 
-class MovieRecyclerViewAdapter(private val onClick: (String) -> Unit) :
+class MovieRecyclerViewAdapter(private val onClick: (String, View) -> Unit) :
     PagingDataAdapter<MovieDataModel, RecyclerView.ViewHolder>(MOVIE_COMPARATOR) {
     private var isGridView = true
 

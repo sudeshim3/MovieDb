@@ -10,7 +10,7 @@ import com.example.openmoviedbswiggy.databinding.MovieRowItemBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 import kotlinx.android.extensions.LayoutContainer
 
-class MovieRowViewHolder(private val binding: MovieRowItemBinding, onClick: (String) -> Unit) :
+class MovieRowViewHolder(private val binding: MovieRowItemBinding, onClick: (String, View) -> Unit) :
     RecyclerView.ViewHolder(binding.root), LayoutContainer {
     private val noImageDrawable =
         ContextCompat.getDrawable(binding.root.context, R.drawable.ic_no_image)
@@ -18,7 +18,7 @@ class MovieRowViewHolder(private val binding: MovieRowItemBinding, onClick: (Str
 
     init {
         binding.root.setOnClickListener {
-            onClick(imdbId)
+            onClick(imdbId, itemView)
         }
     }
 

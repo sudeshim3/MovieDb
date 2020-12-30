@@ -21,10 +21,11 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:id="@+id/details_backdrop"
+                android:id="@+id/movie_thumbnail_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
                 android:scaleType="centerCrop"
+                android:transitionName="@string/banner_transition"
                 app:layout_collapseMode="parallax" />
 
             <ImageView
@@ -44,14 +45,18 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/movie_details_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp">
 
             <TextView
@@ -60,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/fontDark"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Wonder woman" />
@@ -75,8 +81,74 @@
                 app:layout_constraintTop_toBottomOf="@id/title_textView"
                 tools:text="2012-2-01" />
 
+            <TextView
+                android:id="@+id/plot_header_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/plot"
+                android:textColor="@color/fontDark"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/box_office_revenue_textView" />
+
+            <ImageView
+                android:id="@+id/rating_star_imageView"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="4dp"
+                android:contentDescription="Start rating image"
+                android:src="@drawable/ic_star"
+                app:layout_constraintBaseline_toBaselineOf="@id/title_textView"
+                app:layout_constraintEnd_toStartOf="@id/rating_textView" />
+
+            <TextView
+                android:id="@+id/rating_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:textColor="@color/purple_200"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/rating_star_imageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/rating_star_imageView"
+                tools:text="7.5" />
+
+            <TextView
+                android:id="@+id/plot_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/fontLight"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/plot_header_textView"
+                tools:text="Based on the stories of Stephen King, the series intertwines characters and themes from the fictional town of Castle Rock." />
+
+            <TextView
+                android:id="@+id/box_office_revenue_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/box_office_revenue"
+                android:textColor="@color/fontLight"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/release_date" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/detail_loader_lottie"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/movie_loading" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

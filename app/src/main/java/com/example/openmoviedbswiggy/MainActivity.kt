@@ -2,11 +2,14 @@ package com.example.openmoviedbswiggy
 
 import AppConstant.IMDB_ID
 import AppConstant.MIN_CHAR_FOR_SEARCH
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.util.Pair
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
 import androidx.core.text.italic
 import androidx.core.widget.doAfterTextChanged
@@ -45,8 +48,8 @@ class MainActivity : DaggerAppCompatActivity() {
         }
         observePagedSearchResult()
         observeSearchResult()
-        movieRecyclerViewAdapter = MovieRecyclerViewAdapter { imDbId ->
-            openDetailActivity(imDbId)
+        movieRecyclerViewAdapter = MovieRecyclerViewAdapter { imDbId, view ->
+            navigateToMovieDetailsScreen(imDbId, view)
         }
         gridLayoutManager = binding.rvMovieSearchResult.layoutManager as GridLayoutManager
 
@@ -56,12 +59,6 @@ class MainActivity : DaggerAppCompatActivity() {
                 movieRecyclerViewAdapter.withLoadStateFooter(footer = MovieLoadAdapater())
         }
         switchToGridView(true)
-    }
-
-    private fun openDetailActivity(imdbId: String) {
-        val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(IMDB_ID, imdbId)
-        startActivity(intent)
     }
 
     private fun switchToGridView(showGridView: Boolean) {
@@ -175,6 +172,22 @@ class MainActivity : DaggerAppCompatActivity() {
             setSearchHintText()
             binding.errorMessage.visible()
         }
+    }
+
+    private fun navigateToMovieDetailsScreen(movieId: String, view: View) {
+        var activityOptions: ActivityOptions? = null
+        val imageForTransition: View? = view.findViewById(R.id.movie_thumbnail_imageView)
+        imageForTransition?.let {
+            val posterSharedElement: Pair<View, String> =
+                Pair.create(it, getString(R.string.banner_transition))
+            activityOptions =
+                ActivityOptions.makeSceneTransitionAnimation(this, posterSharedElement)
+        }
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(IMDB_ID, movieId)
+        startActivity(intent, activityOptions?.toBundle())
+
+        overridePendingTransition(0, 0)
     }
 
     private fun setSearchHintText() {

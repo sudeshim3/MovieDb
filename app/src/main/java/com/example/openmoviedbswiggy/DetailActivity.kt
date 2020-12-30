@@ -5,6 +5,8 @@ import android.os.Bundle
 import com.example.openmoviedbswiggy.databinding.ActivityDetailBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDetailDataModel
 import com.example.openmoviedbswiggy.datamodel.Result
+import com.example.openmoviedbswiggy.extensions.gone
+import com.example.openmoviedbswiggy.extensions.visible
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +32,7 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        postponeEnterTransition()
 
         if (intent.hasExtra(IMDB_ID)) {
             val movieId = intent.getStringExtra(IMDB_ID)!!
@@ -45,6 +48,7 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
                             showError(movieDetail.error.cause)
                         }
                     }
+                    binding.detailLoaderLottie.gone()
                 }
             )
         } else {
@@ -58,7 +62,12 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
     }
 
     private fun displayDetails(movieDetail: MovieDetailDataModel) {
+        binding.movieDetailsLayout.visible()
         binding.titleTextView.text = movieDetail.title
-        binding.releaseDate.text = movieDetail.year
+        binding.releaseDate.text = getString(R.string.released, movieDetail.releasedDate)
+        binding.ratingTextView.text = movieDetail.imdbRating
+        binding.plotTextView.text = movieDetail.plot
+        binding.boxOfficeRevenueTextView.text =
+            getString(R.string.box_office_revenue, movieDetail.boxOfficeRevenue)
     }
 }

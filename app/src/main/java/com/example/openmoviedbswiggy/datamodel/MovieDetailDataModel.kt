@@ -10,7 +10,7 @@ data class MovieDetailDataModel(
     @SerializedName("Year")
     val year: String,
     @SerializedName("Released")
-    val released: String,
+    val releasedDate: String,
     @SerializedName("Genre")
     val genre: String,
     @SerializedName("Plot")
@@ -18,7 +18,9 @@ data class MovieDetailDataModel(
     @SerializedName("Poster")
     val posterImage: String,
     @SerializedName("imdbRating")
-    val imdbRating: String
+    val imdbRating: String,
+    @SerializedName("BoxOffice")
+    val boxOfficeRevenue: String
 )
 
 /*
