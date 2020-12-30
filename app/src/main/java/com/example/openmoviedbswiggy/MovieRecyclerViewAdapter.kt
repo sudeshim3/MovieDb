@@ -12,7 +12,7 @@ import com.example.openmoviedbswiggy.databinding.MovieGridItemBinding
 import com.example.openmoviedbswiggy.databinding.MovieRowItemBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 
-class MovieRecyclerViewAdapter :
+class MovieRecyclerViewAdapter(private val onClick: (String) -> Unit) :
     PagingDataAdapter<MovieDataModel, RecyclerView.ViewHolder>(MOVIE_COMPARATOR) {
     private var isGridView = true
 
@@ -41,12 +41,12 @@ class MovieRecyclerViewAdapter :
             MOVIE_TYPE_LIST -> {
                 val binding =
                     MovieRowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                MovieRowViewHolder(binding)
+                MovieRowViewHolder(binding, onClick)
             }
             MOVIE_TYPE_GRID -> {
                 val binding =
                     MovieGridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                MovieGridViewHolder(binding)
+                MovieGridViewHolder(binding, onClick)
             }
             else -> super.createViewHolder(parent, viewType)
         }

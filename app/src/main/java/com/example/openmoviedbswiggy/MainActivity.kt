@@ -1,6 +1,8 @@
 package com.example.openmoviedbswiggy
 
+import AppConstant.IMDB_ID
 import AppConstant.MIN_CHAR_FOR_SEARCH
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.Menu
@@ -43,7 +45,9 @@ class MainActivity : DaggerAppCompatActivity() {
         }
         observePagedSearchResult()
         observeSearchResult()
-        movieRecyclerViewAdapter = MovieRecyclerViewAdapter()
+        movieRecyclerViewAdapter = MovieRecyclerViewAdapter { imDbId ->
+            openDetailActivity(imDbId)
+        }
         gridLayoutManager = binding.rvMovieSearchResult.layoutManager as GridLayoutManager
 
         binding.rvMovieSearchResult.apply {
@@ -52,6 +56,12 @@ class MainActivity : DaggerAppCompatActivity() {
                 movieRecyclerViewAdapter.withLoadStateFooter(footer = MovieLoadAdapater())
         }
         switchToGridView(true)
+    }
+
+    private fun openDetailActivity(imdbId: String) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(IMDB_ID, imdbId)
+        startActivity(intent)
     }
 
     private fun switchToGridView(showGridView: Boolean) {
