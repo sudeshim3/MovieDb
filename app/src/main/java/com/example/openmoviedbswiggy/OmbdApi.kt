@@ -1,5 +1,6 @@
 package com.example.openmoviedbswiggy
 
+import com.example.openmoviedbswiggy.datamodel.MovieDetailDataModel
 import com.example.openmoviedbswiggy.datamodel.SearchResult
 import retrofit2.Response
 import retrofit2.http.GET
@@ -14,6 +15,6 @@ interface OmbdApi {
         @Query("page") pageNo: Int
     ): Response<SearchResult>
 
-    @GET
-    suspend fun getMovieDetails()
+    @GET("/")
+    suspend fun getMovieDetails(@Query("i") movieId: String): Response<MovieDetailDataModel>
 }

@@ -5,6 +5,7 @@ import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 import com.example.openmoviedbswiggy.datamodel.Result
 import com.example.openmoviedbswiggy.datamodel.SearchResult
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: MovieDataSource) :
@@ -47,6 +48,11 @@ class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: M
             }
         }
         return pagingSource
+    }
+
+    override suspend fun fetchMovieDetail(movieId: String) = flow {
+        val result = movieDataSourceImpl.fetchMovieDetails(movieId)
+        emit(result)
     }
 
     override fun setSearchString(searchString: String) {
