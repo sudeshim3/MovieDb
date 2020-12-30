@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.openmoviedbswiggy.databinding.MovieGridItemBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 
-class MovieViewHolder(private val binding: MovieGridItemBinding) :
+class MovieGridViewHolder(private val binding: MovieGridItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private val noImageDrawable =
         ContextCompat.getDrawable(binding.root.context, R.drawable.ic_no_image)

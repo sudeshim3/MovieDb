@@ -1,9 +1,10 @@
 package com.example.openmoviedbswiggy
 
-import AppConstant.LOADER_TYPE
 import AppConstant.MIN_CHAR_FOR_SEARCH
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
 import androidx.core.text.italic
 import androidx.core.widget.doAfterTextChanged
@@ -22,10 +23,12 @@ class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var viewModel: MovieViewModel
-
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
     lateinit var movieRecyclerViewAdapter: MovieRecyclerViewAdapter
+    lateinit var gridLayoutManager: GridLayoutManager
+
+    var isGridView = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,20 +43,64 @@ class MainActivity : DaggerAppCompatActivity() {
         }
         observePagedSearchResult()
         observeSearchResult()
-
-        val gridLayoutManager = GridLayoutManager(this, 2)
-        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val viewType = movieRecyclerViewAdapter.getItemViewType(position)
-                return if (viewType == LOADER_TYPE) 2 else 1
-            }
-        }
         movieRecyclerViewAdapter = MovieRecyclerViewAdapter()
+        gridLayoutManager = binding.rvMovieSearchResult.layoutManager as GridLayoutManager
+
         binding.rvMovieSearchResult.apply {
             layoutManager = gridLayoutManager
             adapter =
                 movieRecyclerViewAdapter.withLoadStateFooter(footer = MovieLoadAdapater())
         }
+        switchToGridView(true)
+    }
+
+    private fun switchToGridView(showGridView: Boolean) {
+        isGridView = showGridView
+        if (showGridView) {
+            gridLayoutManager.spanCount = 2
+            gridLayoutManager.spanSizeLookup = GridSpanSizeLookup(movieRecyclerViewAdapter)
+        } else {
+            gridLayoutManager.spanCount = 1
+            gridLayoutManager.spanSizeLookup = ListSpanSizeLookup()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.listView -> {
+                switchToGridView(true)
+                movieRecyclerViewAdapter.setGridView(true)
+                movieRecyclerViewAdapter.notifyItemRangeChanged(
+                    0,
+                    movieRecyclerViewAdapter.itemCount
+                )
+                invalidateOptionsMenu()
+                return true
+            }
+            R.id.gridView -> {
+                switchToGridView(false)
+                movieRecyclerViewAdapter.setGridView(false)
+                // Used notifyItemRangeChanged for animation
+                movieRecyclerViewAdapter.notifyItemRangeChanged(
+                    0,
+                    movieRecyclerViewAdapter.itemCount
+                )
+                invalidateOptionsMenu()
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.gridView)?.isVisible = isGridView
+        menu.findItem(R.id.listView)?.isVisible = !isGridView
+        return true
     }
 
     private fun observeSearchResult() {
@@ -97,8 +144,10 @@ class MainActivity : DaggerAppCompatActivity() {
         viewModel.pagedSearchResult.observe(
             this,
             {
-                CoroutineScope(Dispatchers.IO).launch {
-                    movieRecyclerViewAdapter.submitData(it)
+                if (binding.searchView.text.isNotEmpty()) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        movieRecyclerViewAdapter.submitData(it)
+                    }
                 }
             }
         )

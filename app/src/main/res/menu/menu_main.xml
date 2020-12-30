@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/listView"
+        android:icon="@drawable/ic_list_view"
+        android:title="Switch view"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/gridView"
+        android:icon="@drawable/ic_grid"
+        android:title="Switch list"
+        android:visible="false"
+        app:showAsAction="always"/>
+</menu>
