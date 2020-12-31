@@ -2,8 +2,10 @@ package com.example.openmoviedbswiggy
 
 import AppConstant.BANNER_IMAGE
 import AppConstant.IMDB_ID
+import AppConstant.NO_POSTER
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -35,32 +37,47 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + job
 
+    private val noImageDrawable by lazy {
+        ContextCompat.getDrawable(this, R.drawable.ic_no_image)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         postponeEnterTransition()
+        setBackButtonClickListener()
 
         if (intent.hasExtra(IMDB_ID) && intent.hasExtra(BANNER_IMAGE)) {
             val movieId = intent.getStringExtra(IMDB_ID)!!
             val imageLink = intent.getStringExtra(BANNER_IMAGE)!!
             loadImage(imageLink)
-            detailViewModel.fetchMovieDetail(movieId).observe(
-                this,
-                { movieDetail ->
-                    when (movieDetail) {
-                        is Result.Success -> {
-                            displayDetails(movieDetail.data)
-                        }
-                        is Result.Error -> {
-                            showError(movieDetail.error.cause)
-                        }
-                    }
-                    binding.detailLoaderLottie.gone()
-                }
-            )
+            fetchMovieDetail(movieId)
         } else {
             throw IllegalArgumentException("Missing movie ID")
+        }
+    }
+
+    private fun fetchMovieDetail(movieId: String) {
+        detailViewModel.fetchMovieDetail(movieId).observe(
+            this,
+            { movieDetail ->
+                when (movieDetail) {
+                    is Result.Success -> {
+                        displayDetails(movieDetail.data)
+                    }
+                    is Result.Error -> {
+                        showError(movieDetail.error.cause)
+                    }
+                }
+                binding.detailLoaderLottie.gone()
+            }
+        )
+    }
+
+    private fun setBackButtonClickListener() {
+        binding.detailsBackButton.setOnClickListener {
+            onBackPressed()
         }
     }
 
@@ -80,30 +97,35 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
     }
 
     private fun loadImage(imageUrl: String) {
-        Glide.with(this)
-            .load(imageUrl)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    startPostponedEnterTransition()
-                    return false
-                }
+        if (imageUrl == NO_POSTER) {
+            binding.movieThumbnailImageView.setImageDrawable(noImageDrawable)
+            startPostponedEnterTransition()
+        } else {
+            Glide.with(this)
+                .load(imageUrl)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any,
+                        target: Target<Drawable>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        startPostponedEnterTransition()
+                        return false
+                    }
 
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: Target<Drawable>,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    startPostponedEnterTransition()
-                    return false
-                }
-            })
-            .into(binding.movieThumbnailImageView)
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable>,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        startPostponedEnterTransition()
+                        return false
+                    }
+                })
+                .into(binding.movieThumbnailImageView)
+        }
     }
 }

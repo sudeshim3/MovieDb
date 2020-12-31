@@ -27,7 +27,7 @@ class MovieRowViewHolder(private val binding: MovieRowItemBinding, onClick: (Mov
         binding.titleTextView.text = movieDataModel.title
         binding.subtitleTextView.text = movieDataModel.year
         if (movieDataModel.posterImage == NO_POSTER) {
-            binding.movieImage.apply {
+            binding.movieThumbnailImageView.apply {
                 scaleType = ImageView.ScaleType.CENTER_INSIDE
                 setImageDrawable(noImageDrawable)
             }
@@ -35,7 +35,7 @@ class MovieRowViewHolder(private val binding: MovieRowItemBinding, onClick: (Mov
             Glide.with(binding.root.context)
                 .load(movieDataModel.posterImage)
                 .centerCrop()
-                .into(binding.movieImage)
+                .into(binding.movieThumbnailImageView)
         }
     }
 
