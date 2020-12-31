@@ -21,6 +21,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -82,7 +83,10 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
     }
 
     private fun showError(cause: Throwable?) {
-        val message = cause?.localizedMessage ?: getString(R.string.something_went_wrong)
+        val message: String = when (cause) {
+            is UnknownHostException -> getString(R.string.unknown_host)
+            else -> cause?.localizedMessage ?: getString(R.string.something_went_wrong)
+        }
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 

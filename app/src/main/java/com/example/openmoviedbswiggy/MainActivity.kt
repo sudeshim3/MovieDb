@@ -53,12 +53,15 @@ class MainActivity : DaggerAppCompatActivity() {
         movieRecyclerViewAdapter = MovieRecyclerViewAdapter { movieData, view ->
             navigateToMovieDetailsScreen(movieData, view)
         }
+        val movieLoadAdapter = MovieLoadAdapater {
+            movieRecyclerViewAdapter.retry()
+        }
         gridLayoutManager = binding.rvMovieSearchResult.layoutManager as GridLayoutManager
 
         binding.rvMovieSearchResult.apply {
             layoutManager = gridLayoutManager
             adapter =
-                movieRecyclerViewAdapter.withLoadStateFooter(footer = MovieLoadAdapater())
+                movieRecyclerViewAdapter.withLoadStateFooter(footer = movieLoadAdapter)
         }
         switchToGridView(true)
     }

@@ -9,7 +9,7 @@ import com.example.openmoviedbswiggy.databinding.LoadStateViewBinding
 import com.example.openmoviedbswiggy.extensions.gone
 import com.example.openmoviedbswiggy.extensions.visible
 
-class MovieLoadAdapater : LoadStateAdapter<MovieLoadAdapater.LoadStateViewHolder>() {
+class MovieLoadAdapater(val onRetryClicked: () -> Unit) : LoadStateAdapter<MovieLoadAdapater.LoadStateViewHolder>() {
 
     inner class LoadStateViewHolder(private val binding: LoadStateViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -38,6 +38,9 @@ class MovieLoadAdapater : LoadStateAdapter<MovieLoadAdapater.LoadStateViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
         val binding =
             LoadStateViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding.retryButton.setOnClickListener {
+            onRetryClicked()
+        }
         return LoadStateViewHolder(binding)
     }
 }

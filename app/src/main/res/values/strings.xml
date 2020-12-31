@@ -6,6 +6,7 @@
     <string name="no_movies_found">Sorry, we Didn\'t find any movies for this search"</string>
     <string name="retry">Retry</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="unknown_host">Unknown host! Please check your connection</string>
     <string name="released">"Released:&#160; %1$s"</string>
     <string name="plot">Plot</string>
     <string name="box_office_revenue">Box office revenue: %1$s</string>
