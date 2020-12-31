@@ -50,7 +50,7 @@ class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: M
         return pagingSource
     }
 
-    override suspend fun fetchMovieDetail(movieId: String) = flow {
+    override fun fetchMovieDetail(movieId: String) = flow {
         val result = movieDataSourceImpl.fetchMovieDetails(movieId)
         emit(result)
     }

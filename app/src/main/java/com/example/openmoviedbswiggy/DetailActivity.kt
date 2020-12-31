@@ -132,4 +132,9 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
                 .into(binding.movieThumbnailImageView)
         }
     }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
+    }
 }

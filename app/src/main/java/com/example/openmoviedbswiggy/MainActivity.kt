@@ -23,10 +23,12 @@ import com.example.openmoviedbswiggy.extensions.visible
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : DaggerAppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
 
     @Inject
     lateinit var viewModel: MovieViewModel
@@ -36,6 +38,10 @@ class MainActivity : DaggerAppCompatActivity() {
     lateinit var gridLayoutManager: GridLayoutManager
 
     var isGridView = true
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.IO + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,7 +163,7 @@ class MainActivity : DaggerAppCompatActivity() {
             this,
             {
                 if (binding.searchView.text.isNotEmpty()) {
-                    CoroutineScope(Dispatchers.IO).launch {
+                    CoroutineScope(coroutineContext).launch {
                         movieRecyclerViewAdapter.submitData(it)
                     }
                 }
@@ -210,5 +216,10 @@ class MainActivity : DaggerAppCompatActivity() {
     private fun showLoadingScreen() {
         binding.searchLoader.visible()
         binding.errorMessage.gone()
+    }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
     }
 }

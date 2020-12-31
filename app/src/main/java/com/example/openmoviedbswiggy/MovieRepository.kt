@@ -12,5 +12,5 @@ interface MovieRepository {
     fun fetchMovies(): PagingSource<Int, MovieDataModel>
     fun setSearchString(searchString: String)
     fun getCurrentSearchResult(): Channel<Pair<Int, SearchResult>>
-    suspend fun fetchMovieDetail(movieId: String): Flow<Result<MovieDetailDataModel>>
+    fun fetchMovieDetail(movieId: String): Flow<Result<MovieDetailDataModel>>
 }

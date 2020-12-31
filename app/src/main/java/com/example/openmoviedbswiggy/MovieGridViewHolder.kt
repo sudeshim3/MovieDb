@@ -19,7 +19,7 @@ class MovieGridViewHolder(
     lateinit var movieDetail: MovieDataModel
 
     init {
-        binding.root.setOnClickListener {
+        binding.cardviewContainer.setOnClickListener {
             onClick(movieDetail, itemView)
         }
     }
