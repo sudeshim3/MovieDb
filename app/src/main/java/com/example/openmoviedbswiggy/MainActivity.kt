@@ -20,11 +20,13 @@ import com.example.openmoviedbswiggy.databinding.ActivityMainBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 import com.example.openmoviedbswiggy.extensions.gone
 import com.example.openmoviedbswiggy.extensions.visible
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -72,17 +74,6 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
         switchToGridView(true)
     }
 
-    private fun switchToGridView(showGridView: Boolean) {
-        isGridView = showGridView
-        if (showGridView) {
-            gridLayoutManager.spanCount = 2
-            gridLayoutManager.spanSizeLookup = GridSpanSizeLookup(movieRecyclerViewAdapter)
-        } else {
-            gridLayoutManager.spanCount = 1
-            gridLayoutManager.spanSizeLookup = ListSpanSizeLookup()
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
@@ -121,16 +112,44 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
         return true
     }
 
+    private fun switchToGridView(showGridView: Boolean) {
+        isGridView = showGridView
+        if (showGridView) {
+            gridLayoutManager.spanCount = 2
+            gridLayoutManager.spanSizeLookup = GridSpanSizeLookup(movieRecyclerViewAdapter)
+        } else {
+            gridLayoutManager.spanCount = 1
+            gridLayoutManager.spanSizeLookup = ListSpanSizeLookup()
+        }
+    }
+
+    private fun showError(error: Throwable) {
+        val message: String = when (error.cause) {
+            is UnknownHostException -> getString(R.string.unknown_host)
+            else -> error.localizedMessage ?: getString(R.string.something_went_wrong)
+        }
+        binding.errorMessage.text = message
+        binding.errorMessage.visible()
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+    }
+
     private fun observeSearchResult() {
         viewModel.observeSearchResult().observe(
             this,
-            {
+            { movieResult ->
                 binding.searchLoader.gone()
-                val (pageNumber, searchResult) = it
-                if (searchResult.totalResults == 0 && pageNumber == 1 || binding.searchView.text.length <= MIN_CHAR_FOR_SEARCH) {
-                    setScreenToEmptyState()
-                } else {
-                    setScreenToVisibleState(searchResult.totalResults)
+                when (movieResult) {
+                    is MovieResultState.PageResult -> {
+                        val totalResults = movieResult.searchResult.totalResults
+                        if (totalResults == 0 && movieResult.pageNumber == 1 || binding.searchView.text.length <= MIN_CHAR_FOR_SEARCH) {
+                            setScreenToEmptyState()
+                        } else {
+                            setScreenToVisibleState(totalResults)
+                        }
+                    }
+                    is MovieResultState.PageErrorResponse -> {
+                        showError(movieResult.throwable)
+                    }
                 }
             }
         )

@@ -3,7 +3,6 @@ package com.example.openmoviedbswiggy
 import androidx.paging.PagingSource
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 import com.example.openmoviedbswiggy.datamodel.Result
-import com.example.openmoviedbswiggy.datamodel.SearchResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -12,7 +11,7 @@ class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: M
     MovieRepository {
 
     var searchKey = ""
-    private var searchResult = Channel<Pair<Int, SearchResult>>(Channel.CONFLATED)
+    private var searchResult = Channel<MovieResultState>(Channel.CONFLATED)
 
     override fun getCurrentSearchResult() = searchResult
 
@@ -28,7 +27,12 @@ class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: M
                             )
                     ) {
                         is Result.Success -> {
-                            searchResult.send(Pair(nextPageNumber, result.data))
+                            searchResult.send(
+                                MovieResultState.PageResult(
+                                    nextPageNumber,
+                                    result.data
+                                )
+                            )
                             val searchResult = result.data.searchResult
                             return LoadResult.Page(
                                 data = searchResult ?: listOf(),
@@ -39,6 +43,7 @@ class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: M
                             )
                         }
                         is Result.Error -> {
+                            searchResult.send(MovieResultState.PageErrorResponse(result.error))
                             return LoadResult.Error(result.error)
                         }
                     }

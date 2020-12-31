@@ -12,7 +12,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
-import com.example.openmoviedbswiggy.datamodel.SearchResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -61,7 +60,7 @@ class MovieViewModel @Inject constructor(private val movieRepositoryImpl: MovieR
         movieRepositoryImpl.setSearchString(searchString)
     }
 
-    fun observeSearchResult(): LiveData<Pair<Int, SearchResult>> {
+    fun observeSearchResult(): LiveData<MovieResultState> {
         return movieRepositoryImpl.getCurrentSearchResult().receiveAsFlow().asLiveData()
     }
 
