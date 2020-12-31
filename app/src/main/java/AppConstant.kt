@@ -11,4 +11,5 @@ object AppConstant {
     const val MOVIE_TYPE_LIST = 2
     const val LOADER_TYPE = 3
     const val IMDB_ID = "imdb_id"
+    const val BANNER_IMAGE = "banner_image"
 }

@@ -1,5 +1,6 @@
 package com.example.openmoviedbswiggy
 
+import AppConstant.BANNER_IMAGE
 import AppConstant.IMDB_ID
 import AppConstant.MIN_CHAR_FOR_SEARCH
 import android.app.ActivityOptions
@@ -16,6 +17,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.openmoviedbswiggy.databinding.ActivityMainBinding
+import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 import com.example.openmoviedbswiggy.extensions.gone
 import com.example.openmoviedbswiggy.extensions.visible
 import dagger.android.support.DaggerAppCompatActivity
@@ -48,8 +50,8 @@ class MainActivity : DaggerAppCompatActivity() {
         }
         observePagedSearchResult()
         observeSearchResult()
-        movieRecyclerViewAdapter = MovieRecyclerViewAdapter { imDbId, view ->
-            navigateToMovieDetailsScreen(imDbId, view)
+        movieRecyclerViewAdapter = MovieRecyclerViewAdapter { movieData, view ->
+            navigateToMovieDetailsScreen(movieData, view)
         }
         gridLayoutManager = binding.rvMovieSearchResult.layoutManager as GridLayoutManager
 
@@ -174,7 +176,7 @@ class MainActivity : DaggerAppCompatActivity() {
         }
     }
 
-    private fun navigateToMovieDetailsScreen(movieId: String, view: View) {
+    private fun navigateToMovieDetailsScreen(movieDataModel: MovieDataModel, view: View) {
         var activityOptions: ActivityOptions? = null
         val imageForTransition: View? = view.findViewById(R.id.movie_thumbnail_imageView)
         imageForTransition?.let {
@@ -184,7 +186,8 @@ class MainActivity : DaggerAppCompatActivity() {
                 ActivityOptions.makeSceneTransitionAnimation(this, posterSharedElement)
         }
         val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(IMDB_ID, movieId)
+        intent.putExtra(IMDB_ID, movieDataModel.imbdId)
+        intent.putExtra(BANNER_IMAGE, movieDataModel.posterImage)
         startActivity(intent, activityOptions?.toBundle())
 
         overridePendingTransition(0, 0)

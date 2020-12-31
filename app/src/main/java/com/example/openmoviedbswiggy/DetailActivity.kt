@@ -1,7 +1,14 @@
 package com.example.openmoviedbswiggy
 
+import AppConstant.BANNER_IMAGE
 import AppConstant.IMDB_ID
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.openmoviedbswiggy.databinding.ActivityDetailBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDetailDataModel
 import com.example.openmoviedbswiggy.datamodel.Result
@@ -34,9 +41,10 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         setContentView(binding.root)
         postponeEnterTransition()
 
-        if (intent.hasExtra(IMDB_ID)) {
+        if (intent.hasExtra(IMDB_ID) && intent.hasExtra(BANNER_IMAGE)) {
             val movieId = intent.getStringExtra(IMDB_ID)!!
-
+            val imageLink = intent.getStringExtra(BANNER_IMAGE)!!
+            loadImage(imageLink)
             detailViewModel.fetchMovieDetail(movieId).observe(
                 this,
                 { movieDetail ->
@@ -69,5 +77,33 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         binding.plotTextView.text = movieDetail.plot
         binding.boxOfficeRevenueTextView.text =
             getString(R.string.box_office_revenue, movieDetail.boxOfficeRevenue)
+    }
+
+    private fun loadImage(imageUrl: String) {
+        Glide.with(this)
+            .load(imageUrl)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any,
+                    target: Target<Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    startPostponedEnterTransition()
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    startPostponedEnterTransition()
+                    return false
+                }
+            })
+            .into(binding.movieThumbnailImageView)
     }
 }

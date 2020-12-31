@@ -16,5 +16,8 @@ interface OmbdApi {
     ): Response<SearchResult>
 
     @GET("/")
-    suspend fun getMovieDetails(@Query("i") movieId: String): Response<MovieDetailDataModel>
+    suspend fun getMovieDetails(
+        @Query("i") movieId: String,
+        @Query("plot") plotLength: String = "full"
+    ): Response<MovieDetailDataModel>
 }

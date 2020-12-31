@@ -12,21 +12,21 @@ import kotlinx.android.extensions.LayoutContainer
 
 class MovieGridViewHolder(
     private val binding: MovieGridItemBinding,
-    val onClick: (String, View) -> Unit
+    val onClick: (id: MovieDataModel, View) -> Unit
 ) : RecyclerView.ViewHolder(binding.root), LayoutContainer {
     private val noImageDrawable =
         ContextCompat.getDrawable(binding.root.context, R.drawable.ic_no_image)
-    var imdbId: String = ""
+    lateinit var movieDetail: MovieDataModel
 
     init {
         binding.root.setOnClickListener {
-            onClick(imdbId, itemView)
+            onClick(movieDetail, itemView)
         }
     }
 
     fun bind(movieDataModel: MovieDataModel) {
         binding.titleTextView.text = movieDataModel.title
-        imdbId = movieDataModel.imbdId
+        movieDetail = movieDataModel
         if (movieDataModel.posterImage == NO_POSTER) {
             binding.movieThumbnailImageView.apply {
                 scaleType = ImageView.ScaleType.CENTER_INSIDE

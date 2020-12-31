@@ -13,7 +13,7 @@ import com.example.openmoviedbswiggy.databinding.MovieGridItemBinding
 import com.example.openmoviedbswiggy.databinding.MovieRowItemBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
 
-class MovieRecyclerViewAdapter(private val onClick: (String, View) -> Unit) :
+class MovieRecyclerViewAdapter(private val onClick: (MovieDataModel, View) -> Unit) :
     PagingDataAdapter<MovieDataModel, RecyclerView.ViewHolder>(MOVIE_COMPARATOR) {
     private var isGridView = true
 
