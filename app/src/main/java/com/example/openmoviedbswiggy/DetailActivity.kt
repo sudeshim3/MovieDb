@@ -32,6 +32,7 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
 
     private var _binding: ActivityDetailBinding? = null
     private val binding get() = _binding!!
+    private var fromDeepLink: Boolean = false
 
     private val job = Job()
 
@@ -46,17 +47,35 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         _binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val successfulDeeplinkFetch = loadFromDeepLink()
         postponeEnterTransition()
         setBackButtonClickListener()
 
-        if (intent.hasExtra(IMDB_ID) && intent.hasExtra(BANNER_IMAGE)) {
-            val movieId = intent.getStringExtra(IMDB_ID)!!
-            val imageLink = intent.getStringExtra(BANNER_IMAGE)!!
-            loadImage(imageLink)
-            fetchMovieDetail(movieId)
-        } else {
-            throw IllegalArgumentException("Missing movie ID")
+        if (successfulDeeplinkFetch.not()) {
+            if (intent.hasExtra(IMDB_ID) && intent.hasExtra(BANNER_IMAGE)) {
+                val movieId = intent.getStringExtra(IMDB_ID)!!
+                val imageLink = intent.getStringExtra(BANNER_IMAGE)!!
+                loadImage(imageLink)
+                fetchMovieDetail(movieId)
+            } else {
+                throw IllegalArgumentException("Missing movie ID")
+            }
         }
+    }
+
+    private fun loadFromDeepLink(): Boolean {
+        val intentData = intent.data
+        if (intentData != null) {
+            val pathSegments = intentData.pathSegments
+            if (pathSegments.size > 0) {
+                val last = pathSegments.last()
+                fromDeepLink = true
+                fetchMovieDetail(last)
+                return true
+            } else
+                return false
+        }
+        return false
     }
 
     private fun fetchMovieDetail(movieId: String) {
@@ -98,6 +117,9 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         binding.plotTextView.text = movieDetail.plot
         binding.boxOfficeRevenueTextView.text =
             getString(R.string.box_office_revenue, movieDetail.boxOfficeRevenue)
+        if (fromDeepLink) {
+            loadImage(movieDetail.posterImage)
+        }
     }
 
     private fun loadImage(imageUrl: String) {
