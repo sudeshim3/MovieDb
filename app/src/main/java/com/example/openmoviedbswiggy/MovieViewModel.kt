@@ -23,6 +23,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MovieViewModel @Inject constructor(private val movieRepositoryImpl: MovieRepository) :
     ViewModel() {
+    var searchString: String = ""
     var searchDebounce: ((String) -> Unit)
     private val _searchResult: MutableLiveData<PagingData<MovieDataModel>> = MutableLiveData()
     val pagedSearchResult: LiveData<PagingData<MovieDataModel>> = _searchResult
@@ -45,10 +46,10 @@ class MovieViewModel @Inject constructor(private val movieRepositoryImpl: MovieR
             initialLoadSize = PAGE_SIZE * 2
         )
     ) {
-        movieRepositoryImpl.fetchMovies()
+        movieRepositoryImpl.fetchMovies(searchString)
     }.flow
 
-    private fun collectLatestSearchResult() {
+    fun collectLatestSearchResult() {
         CoroutineScope(viewModelScope.coroutineContext).launch {
             pagerSource().collectLatest {
                 _searchResult.postValue(it)
@@ -57,7 +58,7 @@ class MovieViewModel @Inject constructor(private val movieRepositoryImpl: MovieR
     }
 
     private fun updateSearchKey(searchString: String) {
-        movieRepositoryImpl.setSearchString(searchString)
+        this.searchString = searchString
     }
 
     fun observeSearchResult(): LiveData<MovieResultState> {

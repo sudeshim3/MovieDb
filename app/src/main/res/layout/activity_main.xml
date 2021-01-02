@@ -24,7 +24,7 @@
             android:paddingEnd="16dp">
 
             <EditText
-                android:id="@+id/search_view"
+                android:id="@+id/search_text_field"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -32,7 +32,6 @@
                 android:hint="@string/search_placeholder"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:saveEnabled="false"
                 android:textColor="@color/fontDark"
                 android:textColorHint="@color/fontLight"
                 android:textSize="14sp" />
@@ -64,12 +63,12 @@
         android:id="@+id/rv_movie_search_result"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingBottom="30dp"
         android:clipToPadding="false"
+        android:paddingBottom="30dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/search_result_count"
         tools:listitem="@layout/movie_grid_item" />
 

@@ -10,12 +10,11 @@ import javax.inject.Inject
 class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: MovieDataSource) :
     MovieRepository {
 
-    var searchKey = ""
     private var searchResult = Channel<MovieResultState>(Channel.CONFLATED)
 
     override fun getCurrentSearchResult() = searchResult
 
-    override fun fetchMovies(): PagingSource<Int, MovieDataModel> {
+    override fun fetchMovies(searchKey: String): PagingSource<Int, MovieDataModel> {
         val pagingSource = object : PagingSource<Int, MovieDataModel>() {
             override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieDataModel> {
                 try {
@@ -58,9 +57,5 @@ class MovieRepositoryImpl @Inject constructor(private val movieDataSourceImpl: M
     override fun fetchMovieDetail(movieId: String) = flow {
         val result = movieDataSourceImpl.fetchMovieDetails(movieId)
         emit(result)
-    }
-
-    override fun setSearchString(searchString: String) {
-        searchKey = searchString
     }
 }

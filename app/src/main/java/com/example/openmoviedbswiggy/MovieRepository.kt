@@ -8,8 +8,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    fun fetchMovies(): PagingSource<Int, MovieDataModel>
-    fun setSearchString(searchString: String)
+    fun fetchMovies(searchString: String): PagingSource<Int, MovieDataModel>
     fun getCurrentSearchResult(): Channel<MovieResultState>
     fun fetchMovieDetail(movieId: String): Flow<Result<MovieDetailDataModel>>
 }

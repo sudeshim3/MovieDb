@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.core.text.italic
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.openmoviedbswiggy.databinding.ActivityMainBinding
@@ -33,6 +34,7 @@ import kotlin.coroutines.CoroutineContext
 class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
 
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModel: MovieViewModel
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
@@ -49,15 +51,20 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MovieViewModel::class.java)
         setSearchHintText()
 
-        binding.searchView.doAfterTextChanged { updatedText ->
-            executeOnSearchTextChanged(updatedText.toString())
+        binding.searchTextField.doAfterTextChanged { updatedText ->
+            executeOnSearchTextChanged(updatedText.toString(), savedInstanceState == null)
         }
         observePagedSearchResult()
         observeSearchResult()
+        setupMovieAdapter()
+        switchToGridView(true)
+    }
+
+    private fun setupMovieAdapter() {
         movieRecyclerViewAdapter = MovieRecyclerViewAdapter { movieData, view ->
             navigateToMovieDetailsScreen(movieData, view)
         }
@@ -71,7 +78,6 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
             adapter =
                 movieRecyclerViewAdapter.withLoadStateFooter(footer = movieLoadAdapter)
         }
-        switchToGridView(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -128,9 +134,12 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
             is UnknownHostException -> getString(R.string.unknown_host)
             else -> error.localizedMessage ?: getString(R.string.something_went_wrong)
         }
-        binding.errorMessage.text = message
-        binding.errorMessage.visible()
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+        if (movieRecyclerViewAdapter.itemCount == 0) {
+            binding.errorMessage.text = message
+            binding.errorMessage.visible()
+        } else {
+            Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun observeSearchResult() {
@@ -141,7 +150,7 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
                 when (movieResult) {
                     is MovieResultState.PageResult -> {
                         val totalResults = movieResult.searchResult.totalResults
-                        if (totalResults == 0 && movieResult.pageNumber == 1 || binding.searchView.text.length <= MIN_CHAR_FOR_SEARCH) {
+                        if (totalResults == 0 && movieResult.pageNumber == 1 || binding.searchTextField.text.length <= MIN_CHAR_FOR_SEARCH) {
                             setScreenToEmptyState()
                         } else {
                             setScreenToVisibleState(totalResults)
@@ -170,7 +179,7 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
         binding.searchResultCount.gone()
         binding.searchLoader.gone()
         binding.errorMessage.visible()
-        if (binding.searchView.text.length <= MIN_CHAR_FOR_SEARCH) {
+        if (binding.searchTextField.text.length <= MIN_CHAR_FOR_SEARCH) {
             setSearchHintText()
         } else {
             binding.errorMessage.text = getString(R.string.no_movies_found)
@@ -181,7 +190,7 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
         viewModel.pagedSearchResult.observe(
             this,
             {
-                if (binding.searchView.text.isNotEmpty()) {
+                if (binding.searchTextField.text.isNotEmpty()) {
                     CoroutineScope(coroutineContext).launch {
                         movieRecyclerViewAdapter.submitData(it)
                     }
@@ -190,13 +199,17 @@ class MainActivity : DaggerAppCompatActivity(), CoroutineScope {
         )
     }
 
-    private fun executeOnSearchTextChanged(updatedText: String) {
+    private fun executeOnSearchTextChanged(updatedText: String, shouldRefresh: Boolean) {
         val currentString = updatedText.length
         clearScreen()
         if (currentString > MIN_CHAR_FOR_SEARCH) {
-            showLoadingScreen()
-            movieRecyclerViewAdapter.refresh()
-            viewModel.searchDebounce.invoke(updatedText)
+            if (shouldRefresh || updatedText != viewModel.searchString) {
+                showLoadingScreen()
+                movieRecyclerViewAdapter.refresh()
+                viewModel.searchDebounce.invoke(updatedText)
+            } else {
+                viewModel.collectLatestSearchResult()
+            }
         } else {
             binding.searchLoader.gone()
             setSearchHintText()
