@@ -14,7 +14,7 @@
         android:theme="@style/Theme.OpenMovieDbSwiggy">
         <activity
             android:name=".DetailActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

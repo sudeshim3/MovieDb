@@ -6,6 +6,7 @@ import AppConstant.NO_POSTER
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -16,7 +17,6 @@ import com.example.openmoviedbswiggy.datamodel.MovieDetailDataModel
 import com.example.openmoviedbswiggy.datamodel.Result
 import com.example.openmoviedbswiggy.extensions.gone
 import com.example.openmoviedbswiggy.extensions.visible
-import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -79,15 +79,20 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
     }
 
     private fun fetchMovieDetail(movieId: String) {
+        binding.detailLoaderLottie.visible()
         detailViewModel.fetchMovieDetail(movieId).observe(
             this,
             { movieDetail ->
                 when (movieDetail) {
                     is Result.Success -> {
+                        showErrorUI(false)
+                        binding.plotDetailsGroup.visible()
                         displayDetails(movieDetail.data)
                     }
                     is Result.Error -> {
-                        showError(movieDetail.error.cause)
+                        binding.plotDetailsGroup.gone()
+                        val message = getErrorMessage(movieDetail.error.cause)
+                        showErrorUI(true, message)
                     }
                 }
                 binding.detailLoaderLottie.gone()
@@ -95,22 +100,33 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         )
     }
 
+    private fun showErrorUI(show: Boolean, message: String? = null) {
+        binding.errorMessage.isVisible = show
+        binding.retryButton.isVisible = show
+        if (message != null) {
+            binding.errorMessage.text = message
+        } else {
+            binding.errorMessage.text = ""
+        }
+    }
+
     private fun setBackButtonClickListener() {
         binding.detailsBackButton.setOnClickListener {
             onBackPressed()
         }
+        binding.retryButton.setOnClickListener {
+            fetchMovieDetail(detailViewModel.movieId)
+        }
     }
 
-    private fun showError(cause: Throwable?) {
-        val message: String = when (cause) {
+    private fun getErrorMessage(cause: Throwable?): String {
+        return when (cause) {
             is UnknownHostException -> getString(R.string.unknown_host)
             else -> cause?.localizedMessage ?: getString(R.string.something_went_wrong)
         }
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun displayDetails(movieDetail: MovieDetailDataModel) {
-        binding.movieDetailsLayout.visible()
         binding.titleTextView.text = movieDetail.title
         binding.releaseDate.text = getString(R.string.released, movieDetail.releasedDate)
         binding.ratingTextView.text = movieDetail.imdbRating

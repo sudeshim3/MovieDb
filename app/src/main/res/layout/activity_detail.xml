@@ -48,9 +48,7 @@
         android:id="@+id/movie_details_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:visibility="visible">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -59,18 +57,25 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp">
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/plot_details_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:constraint_referenced_ids="plot_header_textView, box_office_revenue_textView, rating_star_imageView" />
+
             <TextView
                 android:id="@+id/title_textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="@color/fontDark"
                 android:textSize="24sp"
-                android:maxLines="2"
-                android:ellipsize="end"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/rating_star_imageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/rating_star_imageView"
                 tools:text="Ace Ventura: When Nature Calls" />
 
             <TextView
@@ -88,7 +93,7 @@
                 android:id="@+id/plot_header_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/plot"
                 android:textColor="@color/fontDark"
                 android:textSize="24sp"
@@ -103,15 +108,16 @@
                 android:layout_marginEnd="4dp"
                 android:contentDescription="Start rating image"
                 android:src="@drawable/ic_star"
-                app:layout_constraintBaseline_toBaselineOf="@id/title_textView"
-                app:layout_constraintEnd_toStartOf="@id/rating_textView" />
+                app:layout_constraintEnd_toStartOf="@id/rating_textView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/secondaryColor" />
 
             <TextView
                 android:id="@+id/rating_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
-                android:textColor="@color/purple_200"
+                android:textColor="@color/fontLight"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/rating_star_imageView"
@@ -140,6 +146,37 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/release_date" />
+
+            <TextView
+                android:id="@+id/error_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textAlignment="center"
+                android:textColor="@color/fontLight"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Network error!"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/retry_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/primaryColor"
+                android:text="@string/retry"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/error_message" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
