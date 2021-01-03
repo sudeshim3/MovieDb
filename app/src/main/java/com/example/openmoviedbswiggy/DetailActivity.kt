@@ -50,6 +50,7 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         val successfulDeeplinkFetch = loadFromDeepLink()
         postponeEnterTransition()
         setBackButtonClickListener()
+        observeDetailPageLiveData()
 
         if (successfulDeeplinkFetch.not()) {
             if (intent.hasExtra(IMDB_ID) && intent.hasExtra(BANNER_IMAGE)) {
@@ -63,24 +64,8 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun loadFromDeepLink(): Boolean {
-        val intentData = intent.data
-        if (intentData != null) {
-            val pathSegments = intentData.pathSegments
-            if (pathSegments.size > 0) {
-                val last = pathSegments.last()
-                fromDeepLink = true
-                fetchMovieDetail(last)
-                return true
-            } else
-                return false
-        }
-        return false
-    }
-
-    private fun fetchMovieDetail(movieId: String) {
-        binding.detailLoaderLottie.visible()
-        detailViewModel.fetchMovieDetail(movieId).observe(
+    private fun observeDetailPageLiveData() {
+        detailViewModel.liveData.observe(
             this,
             { movieDetail ->
                 when (movieDetail) {
@@ -100,6 +85,26 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
         )
     }
 
+    private fun loadFromDeepLink(): Boolean {
+        val intentData = intent.data
+        if (intentData != null) {
+            val pathSegments = intentData.pathSegments
+            if (pathSegments.size > 0) {
+                val last = pathSegments.last()
+                fromDeepLink = true
+                fetchMovieDetail(last)
+                return true
+            } else
+                return false
+        }
+        return false
+    }
+
+    private fun fetchMovieDetail(movieId: String) {
+        binding.detailLoaderLottie.visible()
+        detailViewModel.fetchMovieDetail(movieId)
+    }
+
     private fun showErrorUI(show: Boolean, message: String? = null) {
         binding.errorMessage.isVisible = show
         binding.retryButton.isVisible = show
@@ -115,6 +120,7 @@ class DetailActivity : DaggerAppCompatActivity(), CoroutineScope {
             onBackPressed()
         }
         binding.retryButton.setOnClickListener {
+            showErrorUI(false)
             fetchMovieDetail(detailViewModel.movieId)
         }
     }

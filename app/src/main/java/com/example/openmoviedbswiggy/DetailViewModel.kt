@@ -14,8 +14,9 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(private val movieRepositoryImpl: MovieRepository) :
     ViewModel() {
     private val liveDataModel: MutableLiveData<Result<MovieDetailDataModel>> = MutableLiveData()
+    val liveData: LiveData<Result<MovieDetailDataModel>> = liveDataModel
     var movieId = ""
-    fun fetchMovieDetail(movieId: String): LiveData<Result<MovieDetailDataModel>> {
+    fun fetchMovieDetail(movieId: String) {
         this.movieId = movieId
         viewModelScope.launch {
             CoroutineScope(coroutineContext).launch {
@@ -24,6 +25,5 @@ class DetailViewModel @Inject constructor(private val movieRepositoryImpl: Movie
                 }
             }
         }
-        return liveDataModel
     }
 }
