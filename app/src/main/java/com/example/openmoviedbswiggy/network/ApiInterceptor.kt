@@ -1,4 +1,4 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.network
 
 import okhttp3.Interceptor
 import okhttp3.Response

@@ -1,14 +1,14 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.ui.adapter
 
-import AppConstant.LOADER_TYPE
-import AppConstant.MOVIE_TYPE_GRID
-import AppConstant.MOVIE_TYPE_LIST
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.openmoviedbswiggy.data.AppConstant.LOADER_TYPE
+import com.example.openmoviedbswiggy.data.AppConstant.MOVIE_TYPE_GRID
+import com.example.openmoviedbswiggy.data.AppConstant.MOVIE_TYPE_LIST
 import com.example.openmoviedbswiggy.databinding.MovieGridItemBinding
 import com.example.openmoviedbswiggy.databinding.MovieRowItemBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel

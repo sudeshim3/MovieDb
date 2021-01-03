@@ -1,7 +1,7 @@
 package com.example.openmoviedbswiggy.di
 
-import com.example.openmoviedbswiggy.DetailActivity
-import com.example.openmoviedbswiggy.MainActivity
+import com.example.openmoviedbswiggy.ui.DetailActivity
+import com.example.openmoviedbswiggy.ui.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -1,8 +1,5 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.ui
 
-import AppConstant.BANNER_IMAGE
-import AppConstant.IMDB_ID
-import AppConstant.NO_POSTER
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
@@ -12,6 +9,10 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.example.openmoviedbswiggy.R
+import com.example.openmoviedbswiggy.data.AppConstant.BANNER_IMAGE
+import com.example.openmoviedbswiggy.data.AppConstant.IMDB_ID
+import com.example.openmoviedbswiggy.data.AppConstant.NO_POSTER
 import com.example.openmoviedbswiggy.databinding.ActivityDetailBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDetailDataModel
 import com.example.openmoviedbswiggy.datamodel.Result

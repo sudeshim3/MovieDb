@@ -1,6 +1,7 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.ui
 
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.openmoviedbswiggy.ui.adapter.MovieRecyclerViewAdapter
 
 class GridSpanSizeLookup(private val movieRecyclerViewAdapter: MovieRecyclerViewAdapter) :
     GridLayoutManager.SpanSizeLookup() {

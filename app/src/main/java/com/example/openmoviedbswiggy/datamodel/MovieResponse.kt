@@ -1,6 +1,4 @@
-package com.example.openmoviedbswiggy
-
-import com.example.openmoviedbswiggy.datamodel.SearchResult
+package com.example.openmoviedbswiggy.datamodel
 
 sealed class MovieResponse {
     data class Data(val result: SearchResult) : MovieResponse()

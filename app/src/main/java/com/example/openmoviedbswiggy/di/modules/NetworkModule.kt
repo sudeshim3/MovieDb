@@ -1,10 +1,10 @@
 package com.example.openmoviedbswiggy.di.modules
 
-import AppConstant.BASE_URL
-import com.example.openmoviedbswiggy.ApiInterceptor
 import com.example.openmoviedbswiggy.BuildConfig
-import com.example.openmoviedbswiggy.OmbdApi
+import com.example.openmoviedbswiggy.data.AppConstant.BASE_URL
 import com.example.openmoviedbswiggy.extensions.delegatingCallFactory
+import com.example.openmoviedbswiggy.network.ApiInterceptor
+import com.example.openmoviedbswiggy.network.OmbdApi
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides

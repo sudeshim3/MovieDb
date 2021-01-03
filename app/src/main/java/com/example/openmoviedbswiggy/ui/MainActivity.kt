@@ -1,8 +1,5 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.ui
 
-import AppConstant.BANNER_IMAGE
-import AppConstant.IMDB_ID
-import AppConstant.MIN_CHAR_FOR_SEARCH
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
@@ -17,10 +14,18 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.openmoviedbswiggy.R
+import com.example.openmoviedbswiggy.data.AppConstant.BANNER_IMAGE
+import com.example.openmoviedbswiggy.data.AppConstant.IMDB_ID
+import com.example.openmoviedbswiggy.data.AppConstant.MIN_CHAR_FOR_SEARCH
 import com.example.openmoviedbswiggy.databinding.ActivityMainBinding
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
+import com.example.openmoviedbswiggy.datamodel.MovieResultState
 import com.example.openmoviedbswiggy.extensions.gone
 import com.example.openmoviedbswiggy.extensions.visible
+import com.example.openmoviedbswiggy.ui.adapter.MovieLoadAdapater
+import com.example.openmoviedbswiggy.ui.adapter.MovieRecyclerViewAdapter
+import com.example.openmoviedbswiggy.ui.viewmodel.MovieViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.CoroutineScope

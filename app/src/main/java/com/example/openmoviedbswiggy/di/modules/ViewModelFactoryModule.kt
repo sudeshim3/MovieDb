@@ -1,7 +1,7 @@
 package com.example.openmoviedbswiggy.di.modules
 
 import androidx.lifecycle.ViewModelProvider
-import com.example.openmoviedbswiggy.MovieVMFactory
+import com.example.openmoviedbswiggy.di.MovieVMFactory
 import dagger.Binds
 import dagger.Module
 

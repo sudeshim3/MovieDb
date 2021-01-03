@@ -1,9 +1,10 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.openmoviedbswiggy.data.MovieRepository
 import com.example.openmoviedbswiggy.datamodel.MovieDetailDataModel
 import com.example.openmoviedbswiggy.datamodel.Result
 import kotlinx.coroutines.CoroutineScope

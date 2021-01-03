@@ -1,4 +1,4 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

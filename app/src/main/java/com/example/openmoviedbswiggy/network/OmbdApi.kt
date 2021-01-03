@@ -1,4 +1,4 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.network
 
 import com.example.openmoviedbswiggy.datamodel.MovieDetailDataModel
 import com.example.openmoviedbswiggy.datamodel.SearchResult

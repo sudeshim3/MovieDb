@@ -1,4 +1,4 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.ui
 
 import androidx.recyclerview.widget.GridLayoutManager
 

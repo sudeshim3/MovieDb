@@ -1,7 +1,8 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.data
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.openmoviedbswiggy.ui.viewmodel.MovieViewModel
 
 class MovieRepoFactory(private val movieRepositoryImpl: MovieRepository) : ViewModelProvider.Factory {
 

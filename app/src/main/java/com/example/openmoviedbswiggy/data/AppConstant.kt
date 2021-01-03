@@ -1,3 +1,5 @@
+package com.example.openmoviedbswiggy.data
+
 object AppConstant {
     const val BASE_URL = "http://www.omdbapi.com"
     /*

@@ -1,8 +1,5 @@
-package com.example.openmoviedbswiggy
+package com.example.openmoviedbswiggy.ui.viewmodel
 
-import AppConstant.MIN_CHAR_FOR_SEARCH
-import AppConstant.PAGE_SIZE
-import AppConstant.SEARCH_DEBOUNCE_INTERVAL
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +8,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.example.openmoviedbswiggy.data.AppConstant.MIN_CHAR_FOR_SEARCH
+import com.example.openmoviedbswiggy.data.AppConstant.PAGE_SIZE
+import com.example.openmoviedbswiggy.data.AppConstant.SEARCH_DEBOUNCE_INTERVAL
+import com.example.openmoviedbswiggy.data.MovieRepository
 import com.example.openmoviedbswiggy.datamodel.MovieDataModel
+import com.example.openmoviedbswiggy.datamodel.MovieResultState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
