@@ -17,6 +17,7 @@ ext {
     LifecycleViewModel = "2.2.0"
     OkHttp = '4.8.1'
     Timber = "4.7.1"
+    CoroutineTest = "1.4.2"
     Lottie = '3.4.1'
     pagingVersion = '3.0.0-alpha03'
 }
